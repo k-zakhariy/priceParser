@@ -1,0 +1,24 @@
+<ul class="list-group">
+    <li class="list-group-item" >
+        <table class="table table-hover" width="100%">
+            <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>В коробке</th>
+                <th>Нал</th>
+                <th>Безнал</th>
+                <th>Всего</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="position" ng-class="{'active': position.active,'heading': position.heading}" ng-click="check(position)" ng-repeat="position in positions | filter:query">
+                <td>{{ position.title }}</td>
+                <td>{{ position.inbox }}</td>
+                <td>{{ position.nal }}</td>
+                <td>{{ position.beznal }}</td>
+                <td>{{ position.total }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
+</ul>

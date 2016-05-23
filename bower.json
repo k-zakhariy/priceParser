@@ -1,0 +1,17 @@
+{
+  "name": "priceParser",
+  "homepage": "https://github.com/k-zakhariy/priceParser",
+  "authors": [
+    "Zahar <kzm.pianist@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -14,71 +14,77 @@
                 $scope.parsedPrice = '';
             }
 
-
-
+            var search;
+            var objects = {};
+            var formatPrice = function (price, count) {
+                return (parseFloat(price.replace(',', '.')) * parseFloat(count)).toFixed(2);
+            }
             $scope.convert = function (text) {
                 $scope.text =
                     $scope.parsedPrice = text;
                 var positions = [];
+
+                var x = 0;
                 text.split('\n').forEach(function (line) {
-                    // var num = line.test(new RegExp(/\d+шт/gi));
-                    // num = line.replace(/\d+шт/gi,"$1")
+                    var count, weight, price;
+                    var isHeading;
+
                     var regexps = {
-                        inbox: /\d+шт/gi,
-                        beznal: /\d+руб./gi,
+                        weight: /(\d+кг|по \d кг.|\d+ (кг|кг.))/gi,
+                        count: /\d+(шт| шт|ш| ш| шт.)/gi,
+                        price: /\d+.\d+(руб.| руб.)/gi,
                     };
-
                     var position = {};
-                    var inbox = line.search(regexps.inbox);
-                    var data = line.substring(inbox, inbox.length)
-                        .replace(/\ шт+/g, 'шт')
-                        .replace(/\ руб+/g, 'руб')
 
-                        .replace(/\шт.+/g, 'шт#')
-                        .replace(/\руб.+/g, 'руб#')
-                        .replace(',', '.')
-                        .replace(/\s+/g, '');
+                    if (count = regexps.count.exec(line)) {
+                        position['inbox'] = count[0];
+                    } else {
+                        //position['inbox'] = 1;
+                    }
+                    //position['nal'] = 2222;
+                    if (price = regexps.price.exec(line)) {
+                        //console.log(price);
+                        position['nal'] = price[0];
+                        if (position['inbox'])
+                            position['beznal'] = formatPrice(position['nal'], position['inbox']);
+                    }
+                    if (!count && !price) {
+                        isHeading = true;
 
-                    data = data.split('#');
-                    //console.log(data);
-                    data.forEach(function (i, index) {
-                        var x = i.split('*');
-                        data[index] = parseSentenceForNumber(x[1] ? x[1] : x[0]);
-                    })
-                    if (!data[0]) {
                         position['heading'] = true;
 
-                        console.log(line);
+                        x = 0;
                     } else {
-                        position['nal'] = data[1];
-                        position['inbox'] = data[0];
+                        isHeading = false;
+                        x++;
                     }
 
-                    // var beznal = regexps.beznal.exec(line);
+                    if (weight = regexps.weight.exec(line)) {
+                        if (!isHeading && !count) {
+                            position['inbox'] = parseFloat(weight[0]);
+                            position['beznal'] = formatPrice(position['nal'], parseFloat(position['inbox']));
+                        }
+                        console.log('weight', weight);
+                    }
 
-                    // position['inbox'] = (inbox ? inbox[0] : null);
 
-                    // console.log(beznal);
-                    // /The best/.exec(text)
-                    /*while ((m = re.exec(str)) !== null) {
-                     if (m.index === re.lastIndex) {
-                     re.lastIndex++;
-                     }
-                     position['inbox'] = m[0];
-                     console.log(m);
-                     // View your result using the m-variable.
-                     // eg m[0] etc.
-                     }*/
+                    position['index'] = x;
                     position['title'] = line;
-                    /*{
-                     title: line,
-                     nal: "111",
-                     inbox: "222",
-                     beznal: "222",
-                     total: "333",
-                     active: false
-                     }*/
                     positions.push(position)
+                    if (isHeading) {
+                       /* positions.splice(positions.indexOf(position), 0, {
+                            legend: true,
+                            index: '№',
+                            title: 'Наименование продукции',
+                            nal: (!count && weight ? 'Цена за кг. ' : 'Цена за ед.'),
+                            inbox: 'Кол-во в уп.',
+                            beznal: "Цена за уп.",
+                            //total: "333",
+                            //active: false
+                        })*/
+
+                    }
+
                 });
                 $scope.positions = positions;
 

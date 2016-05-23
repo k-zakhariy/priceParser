@@ -7,7 +7,10 @@
                 positions: '=list'
             },
             template: $templateCache.get('position/list.html'),
-            link: function($scope){
+            link: function($scope, $element){
+                $element.find('table').click(function(i,el){
+                   console.log($(el).html());
+                });
                 $scope.check = function (position) {
                     $scope.positions.forEach(function (pos) {
                         pos.active = false;

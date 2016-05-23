@@ -1,8 +1,15 @@
+<form action="" method="post" role="form">
+	<legend>Поиск</legend>
+	<div class="form-group">
+		<input type="text" ng-model="query" class="form-control" placeholder="Поиск...">
+	</div>
+</form>
 <ul class="list-group">
     <li class="list-group-item" >
         <table class="table table-hover" width="100%">
             <thead>
             <tr>
+                <th>#</th>
                 <th>Наименование</th>
                 <th>В коробке</th>
                 <th>Нал</th>
@@ -11,12 +18,18 @@
             </tr>
             </thead>
             <tbody>
-            <tr class="position" ng-class="{'active': position.active,'heading': position.heading}" ng-click="check(position)" ng-repeat="position in positions | filter:query">
+
+            <tr class="position" ng-class="{'active': position.active,'heading': position.heading}" ng-click="check(position)" ng-repeat="position in positions | filter:query track by $index">
+                <td>
+                    <p align="center">{{ position.index }}</p>
+                </td>
                 <td>{{ position.title }}</td>
-                <td>{{ position.inbox }}</td>
+                <td style="text-align: center;">{{ position.inbox }}</td>
                 <td>{{ position.nal }}</td>
                 <td>{{ position.beznal }}</td>
-                <td>{{ position.total }}</td>
+                <td>
+                    <p ng-if="!position.heading" align="center">упак.</p>
+                </td>
             </tr>
             </tbody>
         </table>

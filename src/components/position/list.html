@@ -19,14 +19,16 @@
             </thead>
             <tbody>
 
-            <tr class="position" ng-class="{'active': position.active,'heading': position.heading}" ng-click="check(position)" ng-repeat="position in positions | filter:query track by $index">
+            <tr class="position" ng-class="{'active': position.active,'heading': position.heading}"
+                ng-click="check(position)" ng-repeat="position in positions | filter:query track by $index">
                 <td>
-                    <p align="center">{{ position.index }}</p>
+                    <p align="center" ng-if="position.index != 0">{{ position.index }}</p>
                 </td>
-                <td>{{ position.title }}</td>
+                <td ng-if="position.index ==0"><div class="h4">{{ position.title }}</div></td>
+                <td ng-if="position.index !=0">{{ position.title }}</td>
                 <td style="text-align: center;">{{ position.inbox }}</td>
-                <td>{{ position.nal }}</td>
-                <td>{{ position.beznal }}</td>
+                <td><input ng-if="position.nal" data-clipboard-text="{{ position.nal }}" ng-click="focusInput($event)" class="form-control nal" type="text" value="{{ position.nal }}"></td>
+                <td><input ng-if="position.beznal" data-clipboard-text="{{ position.beznal }}" ng-click="focusInput($event)" class="form-control beznal" type="text" value="{{ position.beznal }}"></td>
                 <td>
                     <p ng-if="!position.heading" align="center">упак.</p>
                 </td>

@@ -47,10 +47,12 @@ app.addStyle = function (paths, outputFilename, options) {
 };
 app.addScript = function (paths, outputFilename, annotate) {
     return gulp.src(paths)
-        //.pipe(plugins.ngAnnotate())
+        .pipe(plugins.if(config.production, plugins.ngAnnotate()))
         .pipe(plugins.if(config.sourceMaps, plugins.sourcemaps.init()))
         .pipe(plugins.concat('js/' + outputFilename))
+        .pipe(plugins.if(config.production, plugins.uglify()))
         .pipe(plugins.if(config.sourceMaps, plugins.sourcemaps.write('.')))
+
         .pipe(gulp.dest('dist'))
 };
 app.addTemplate = function(paths, outputFilename){

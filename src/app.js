@@ -88,7 +88,10 @@
 
                         position['index'] = x;
                         position['title'] = line;
-                        if(position['beznal']) position['beznal'] += ' руб.';
+                        if(position['beznal']) {
+                            position['beznal'] = position['beznal'].replace('.',','); 
+                            position['beznal'] += ' руб.';
+                        }
                         positions.push(position)
                         if (isHeading) {
                             /* positions.splice(positions.indexOf(position), 0, {
